@@ -12,19 +12,24 @@ from airbyte_cdk.sources.streams import IncrementalMixin, Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 
 
+
 class AvniStream(HttpStream, ABC):
 
     url_base = "https://app.avniproject.org/api/"
     primary_key = "ID"
 
-    def __init__(self, lastModifiedDateTime: str, auth_token: str, **kwargs):
+    def __init__(self, lastModifiedDateTime: str, path , auth_token: str, **kwargs):
         super().__init__(**kwargs)
         self.cursor_value = None
         self.current_page = 0
         self.lastModifiedDateTime = lastModifiedDateTime
         self.last_record = None
         self.auth_token = auth_token
+        self.stream=path
 
+
+class AvniDataStream(AvniStream):
+    
     def request_params(
         self, stream_state: Mapping[str, Any], stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
     ) -> MutableMapping[str, Any]:
@@ -34,6 +39,10 @@ class AvniStream(HttpStream, ABC):
             params.update(next_page_token)
         return params
 
+    def path(self, **kwargs) -> str:
+        
+        return self.stream
+    
     def request_headers(
         self, stream_state: Mapping[str, Any], stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
     ) -> Mapping[str, Any]:
@@ -42,7 +51,7 @@ class AvniStream(HttpStream, ABC):
 
     def parse_response(self, response: requests.Response, **kwargs) -> Iterable[Mapping]:
 
-        data = response.json()["content"]
+      3333  data = response.json()["content"]
         if data:
             self.last_record = data[-1]
 
@@ -72,9 +81,6 @@ class AvniStream(HttpStream, ABC):
 
         return None
 
-
-class IncrementalAvniStream(AvniStream, IncrementalMixin, ABC):
-
     state_checkpoint_interval = None
 
     @property
@@ -93,26 +99,6 @@ class IncrementalAvniStream(AvniStream, IncrementalMixin, ABC):
     def state(self, value: Mapping[str, Any]):
         self.cursor_value = value[self.cursor_field[1]]
         self._state = value
-
-
-class Subjects(IncrementalAvniStream):
-    def path(self, **kwargs) -> str:
-        return "subjects"
-
-
-class ProgramEnrolments(IncrementalAvniStream):
-    def path(self, **kwargs) -> str:
-        return "programEnrolments"
-
-
-class ProgramEncounters(IncrementalAvniStream):
-    def path(self, **kwargs) -> str:
-        return "programEncounters"
-
-
-class Encounters(IncrementalAvniStream):
-    def path(self, **kwargs) -> str:
-        return "encounters"
 
 
 class SourceAvni(AbstractSource):
@@ -169,12 +155,10 @@ class SourceAvni(AbstractSource):
             raise error
 
         auth_token = self.get_token(username, password, client_id)
-
-        stream_kwargs = {"auth_token": auth_token, "lastModifiedDateTime": config["lastModifiedDateTime"]}
-
-        return [
-            Subjects(**stream_kwargs),
-            ProgramEnrolments(**stream_kwargs),
-            ProgramEncounters(**stream_kwargs),
-            Encounters(**stream_kwargs),
-        ]
+        
+        endpoints =["subjects","program_encounters","encounters","program_enrolments"]
+        
+        for endpoint in endpoints:
+            stream_kwargs = {"auth_token": auth_token, "lastModifiedDateTime": config["lastModifiedDateTime"],"path":endpoint}
+            
+            return [AvniDataStream(**stream_kwargs)]
