@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "ID": {
+      "type": "string"
+    },
+    "External ID": {
+      "type": ["string", "null"]
+    },
+    "Voided": {
+      "type": "boolean"
+    },
+    "Subject type": {
+      "type": "string"
+    },
+    "Registration location": {
+      "type": ["object", "null"],
+      "properties": {
+        "X": {
+          "type": ["number", "null"]
+        },
+        "Y": {
+          "type": ["number", "null"],
+          "example": 74.7364501
+        }
+      }
+    },
+    "Registration date": {
+      "type": "string"
+    },
+    "location": {
+      "type": ["object", "null"]
+    },
+    "relatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Voided": {
+            "type": "boolean"
+          },
+          "Relationship type": {
+            "type": ["string", "null"]
+          },
+          "Relative ID": {
+            "type": ["string", "null"]
+          },
+          "Relative external ID": {
+            "type": ["string", "null"]
+          },
+          "Enter date": {
+            "type": ["string", "null"]
+          },
+          "Exit date": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": ["object", "null"]
+    },
+    "encounters": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "enrolments": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "audit": {
+      "type": ["object", "null"],
+      "properties": {
+        "Created at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2016-07-21T17:32:28Z"
+        },
+        "Last modified at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2018-07-21T17:32:28Z"
+        },
+        "Created by": {
+          "type": "string"
+        },
+        "Last modified by": {
+          "type": "string"
+        }
+      }
+    },
+    "Groups": {
+      "type": ["array","null"],
+      "items": {
+        "type": ["string","null"]
+      }
+    }
+  }
+}

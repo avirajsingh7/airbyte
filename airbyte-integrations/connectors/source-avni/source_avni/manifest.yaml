@@ -5,40 +5,61 @@ definitions:
     type: RecordSelector
     extractor:
       type: DpathExtractor
-      field_path: []
+      field_path: ["content"]
+
   requester:
     type: HttpRequester
-    url_base: "https://example.com"
+    url_base: "https://app.avniproject.org/api"
     http_method: "GET"
     authenticator:
-      type: BearerAuthenticator
-      api_token: "{{ config['api_key'] }}"
+      type: "ApiKeyAuthenticator"
+      header: "auth-token"
+      api_token: "{{config['ApiToken']}}"
+    request_parameters:
+      lastModifiedDateTime: "{{config['lastModifiedDateTime']}}"
+
   retriever:
     type: SimpleRetriever
     record_selector:
       $ref: "#/definitions/selector"
     paginator:
-      type: NoPagination
+      type: "DefaultPaginator"
+      page_size_option:
+        type: "RequestOption"
+        inject_into: "request_parameter"
+        field_name: "page_size"
+      pagination_strategy:
+        type: "PageIncrement"
+        page_size: 20
+      page_token_option:
+        type: "RequestOption"
+        inject_into: "request_parameter"
+        field_name: "page"
+
     requester:
       $ref: "#/definitions/requester"
+
   base_stream:
     type: DeclarativeStream
     retriever:
       $ref: "#/definitions/retriever"
-  customers_stream:
+  subjects_stream:
     $ref: "#/definitions/base_stream"
-    name: "customers"
-    primary_key: "id"
+    name: "subjects"
+    primary_key: "ID"
     $parameters:
-      path: "/example"
+      path: "/subjects"
+
+
 
 streams:
-  - "#/definitions/customers_stream"
+  - "#/definitions/subjects_stream"
 
 check:
   type: CheckStream
   stream_names:
-    - "customers"
+    - "subjects"
+
 
 spec:
   type: Spec
@@ -47,10 +68,16 @@ spec:
     title: Avni Spec
     type: object
     required:
-      - api_key
+      - ApiToken
+      - lastModifiedDateTime
     additionalProperties: true
     properties:
-      # 'TODO: This schema defines the configuration required for the source. This usually involves metadata such as database and/or authentication information.':
-      api_key:
+      ApiToken:
         type: string
-        description: API Key
+        description: Your avni platform Username
+      lastModifiedDateTime:
+        type: string
+        default: "2000-06-23T01:30:00.000Z"
+        description: Specify Date and time from which you want to fetch data
+        examples:
+          - "2000-10-31T01:30:00.000Z"
