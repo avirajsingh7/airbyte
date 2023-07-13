@@ -11,6 +11,9 @@
       "Voided": {
         "type": "boolean"
       },
+      "Encounter type": {
+        "type": ["string", "null"]
+      },
       "Subject ID": {
         "type": "string"
       },
@@ -20,13 +23,10 @@
       "Subject external ID": {
         "type": ["string", "null"]
       },
-      "Program": {
+      "Encounter date time": {
         "type": ["string", "null"]
       },
-      "Enrolment datetime": {
-        "type": ["string", "null"]
-      },
-      "Enrolment location": {
+      "Encounter location": {
         "type": ["object", "null"],
         "properties": {
           "X": {
@@ -38,32 +38,32 @@
           }
         }
       },
-      "Exit datetime": {
+      "Earliest scheduled date": {
         "type": ["string", "null"]
       },
-      "Exit location": {
-        "type": ["object", "null"],
-        "properties": {
-          "X": {
-            "type": ["number", "null"]
-          },
-          "Y": {
-            "type": ["number", "null"],
-            "example": 74.7364501
-          }
-        }
+      "Max scheduled date": {
+        "type": ["string", "null"]
       },
       "observations": {
         "type": ["object", "null"]
       },
-      "exitObservations": {
-        "type": ["object", "null"]
-      },
-      "encounters": {
-        "type": ["array", "null"],
-        "items": {
-          "type": "string"
+      "Cancel location": {
+        "type": ["object", "null"],
+        "properties": {
+          "X": {
+            "type": ["number", "null"]
+          },
+          "Y": {
+            "type": ["number", "null"],
+            "example": 74.7364501
+          }
         }
+      },
+      "Cancel date time": {
+        "type": ["string", "null"]
+      },
+      "cancelObservations": {
+        "type": ["object", "null"]
       },
       "audit": {
         "type": ["object", "null"],
