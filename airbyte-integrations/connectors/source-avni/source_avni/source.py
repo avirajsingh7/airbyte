@@ -28,7 +28,7 @@ class AvniStream(HttpStream, ABC):
         self.stream=path
 
 
-class AvniDataStream(AvniStream):
+class AvniDataStream(AvniStream,IncrementalMixin):
     
     def request_params(
         self, stream_state: Mapping[str, Any], stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
@@ -40,7 +40,7 @@ class AvniDataStream(AvniStream):
         return params
 
     def path(self, **kwargs) -> str:
-        
+        print(self.stream)
         return self.stream
     
     def request_headers(
@@ -51,7 +51,7 @@ class AvniDataStream(AvniStream):
 
     def parse_response(self, response: requests.Response, **kwargs) -> Iterable[Mapping]:
 
-      3333  data = response.json()["content"]
+        data = response.json()["content"]
         if data:
             self.last_record = data[-1]
 
@@ -142,9 +142,10 @@ class SourceAvni(AbstractSource):
             return True, None
         else:
             return False, None
-
-    def streams(self, config: Mapping[str, Any]) -> List[Stream]:
-
+        
+    def generate_streams(self, config: str) -> List[Stream]:
+        
+        streams = []
         username = config["username"]
         password = config["password"]
 
@@ -156,9 +157,17 @@ class SourceAvni(AbstractSource):
 
         auth_token = self.get_token(username, password, client_id)
         
-        endpoints =["subjects","program_encounters","encounters","program_enrolments"]
-        
+        endpoints =["subjects","programEncounters","encounters","programEnrolments"]
         for endpoint in endpoints:
-            stream_kwargs = {"auth_token": auth_token, "lastModifiedDateTime": config["lastModifiedDateTime"],"path":endpoint}
-            
-            return [AvniDataStream(**stream_kwargs)]
+            stream_kwargs = {"auth_token": auth_token, "lastModifiedDateTime": config["lastModifiedDateTime"]}
+            stream=AvniDataStream(path=endpoint,**stream_kwargs)
+            streams.append(stream)
+
+        return streams
+
+    def streams(self, config: Mapping[str, Any]) -> List[Stream]:
+        
+        streams = self.generate_streams(config=config)
+        len(streams)
+        print(streams)
+        return streams
