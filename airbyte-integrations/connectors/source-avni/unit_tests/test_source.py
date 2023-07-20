@@ -20,17 +20,19 @@ def test_check_connection(mocker):
 
 def test_streams(mocker):
 
-    mocker.patch('source_avni.source.SourceAvni.get_token').return_value = 'fake_token'
+    mocker.patch('source_avni.source.SourceAvni.generate_streams').return_value = ["a","b","c","d"]
     source = SourceAvni()
     config_mock = {"username": "test_user", "password": "test_password", "lastModifiedDateTime": "2000-06-27T04:18:36.914Z"}
     streams = source.streams(config_mock)
     excepted_outcome = 4
     assert len(streams) == excepted_outcome
 
-
-def test_get_client_id(mocker):
-
+def test_generate_streams(mocker):
+    
+    mocker.patch('source_avni.source.SourceAvni.get_token').return_value = "Token"
+    mocker.patch('source_avni.source.SourceAvni.get_client_id').return_value = "Token"
     source = SourceAvni()
-    client_id = source.get_client_id()
-    expected_length = 26
-    assert len(client_id) == expected_length
+    config_mock = {"username": "test_user", "password": "test_password", "lastModifiedDateTime": "2000-06-27T04:18:36.914Z"}
+    streams = source.generate_streams(config_mock)
+    assert len(streams)==4
+    

@@ -12,7 +12,6 @@ from airbyte_cdk.sources.streams import IncrementalMixin, Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 
 
-
 class AvniStream(HttpStream, ABC):
 
     url_base = "https://app.avniproject.org/api/"
@@ -38,9 +37,13 @@ class AvniDataStream(AvniStream,IncrementalMixin):
         if next_page_token:
             params.update(next_page_token)
         return params
+    
+    @property
+    def name(self) -> str:
+        return self.stream
 
     def path(self, **kwargs) -> str:
-        print(self.stream)
+
         return self.stream
     
     def request_headers(
@@ -157,7 +160,7 @@ class SourceAvni(AbstractSource):
 
         auth_token = self.get_token(username, password, client_id)
         
-        endpoints =["subjects","programEncounters","encounters","programEnrolments"]
+        endpoints =["subjects","programEnrolments","programEncounters","encounters"]
         for endpoint in endpoints:
             stream_kwargs = {"auth_token": auth_token, "lastModifiedDateTime": config["lastModifiedDateTime"]}
             stream=AvniDataStream(path=endpoint,**stream_kwargs)
@@ -166,8 +169,6 @@ class SourceAvni(AbstractSource):
         return streams
 
     def streams(self, config: Mapping[str, Any]) -> List[Stream]:
-        
+
         streams = self.generate_streams(config=config)
-        len(streams)
-        print(streams)
         return streams

@@ -2,7 +2,7 @@
   "streams": [
     {
       "stream": {
-        "name": "avni_data_stream",
+        "name": "subjects",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh","incremental"],
         "source_defined_cursor": true,
@@ -16,7 +16,7 @@
     },
     {
       "stream": {
-        "name": "avni_data_stream",
+        "name": "programEnrolments",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh","incremental"],
         "source_defined_cursor": true,
@@ -30,7 +30,7 @@
     },
     {
       "stream": {
-        "name": "avni_data_stream",
+        "name": "programEncounters",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh","incremental"],
         "source_defined_cursor": true,
@@ -44,7 +44,7 @@
     },
     {
       "stream": {
-        "name": "avni_data_stream",
+        "name": "encounters",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh","incremental"],
         "source_defined_cursor": true,
