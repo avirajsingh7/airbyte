@@ -1,0 +1,5 @@
+{
+  "query_path": "data/2019/cbp",
+  "query_params": "{'get': ['MOVEDIN,GEOID1,GEOID2,MOVEDOUT,FULL1_NAME,FULL2_NAME,MOVEDNET'],'for': ['county:*']}",
+  "api_key": "MY_API_KEY"
+}

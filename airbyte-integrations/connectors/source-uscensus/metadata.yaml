@@ -1,0 +1,19 @@
+data:
+  allowedHosts:
+    hosts:
+      - "*" # Please change to the hostname of the source.
+  registries:
+    oss:
+      enabled: false
+  connectorSubtype: api
+  connectorType: source
+  definitionId: d77ce6f6-a90e-4319-a6d8-a9268d156806
+  dockerImageTag: 0.1.0
+  dockerRepository: airbyte/source-uscensus
+  githubIssueLabel: source-uscensus
+  icon: uscensus.svg
+  license: MIT
+  name: Uscensus 
+  releaseStage: alpha
+  supportUrl: https://docs.airbyte.com/integrations/sources/uscensus
+metadataSpecVersion: "1.0"
