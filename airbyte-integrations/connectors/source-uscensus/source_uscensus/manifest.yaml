@@ -34,12 +34,13 @@ definitions:
       path: "{{ config['query_path'] }}"
 
 streams:
-  - "#/definitions/uscensus_stream"
+  - "#/definitions/uscensus"
 
 check:
   type: CheckStream
   stream_names:
-    - "uscensus_stream"
+    - "uscensus"
+
 
 spec:
   type: Spec
