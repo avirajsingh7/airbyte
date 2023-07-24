@@ -26,7 +26,7 @@ definitions:
     type: DeclarativeStream
     retriever:
       $ref: "#/definitions/retriever"
-  uscensus_stream:
+  uscensus:
     $ref: "#/definitions/base_stream"
     name: "uscensus"
     primary_key: ""
