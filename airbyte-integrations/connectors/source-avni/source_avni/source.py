@@ -72,9 +72,9 @@ class AvniStream(Avni,IncrementalMixin):
 
         if self.last_record:
             updated_last_date = self.last_record["audit"]["Last modified at"]
-            self.state = {self.cursor_field[1]: updated_last_date}
-            self.last_record = None
-
+            if updated_last_date>self.state[self.cursor_field[1]]:
+                self.state = {self.cursor_field[1]: updated_last_date}
+        self.last_record = None
         return None
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
