@@ -6,20 +6,20 @@ from http import HTTPStatus
 from unittest.mock import MagicMock
 
 import pytest
-from source_avni.source import AvniDataStream
+from source_avni.source import AvniStream
 
 
 @pytest.fixture
 def patch_base_class(mocker):
 
-    mocker.patch.object(AvniDataStream, "path", "v0/example_endpoint")
-    mocker.patch.object(AvniDataStream, "primary_key", "test_primary_key")
-    mocker.patch.object(AvniDataStream, "__abstractmethods__", set())
+    mocker.patch.object(AvniStream, "path", "v0/example_endpoint")
+    mocker.patch.object(AvniStream, "primary_key", "test_primary_key")
+    mocker.patch.object(AvniStream, "__abstractmethods__", set())
 
 
 def test_request_params(mocker,patch_base_class):
 
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     inputs = {"stream_slice": None, "stream_state": None, "next_page_token": {"page":5}}
     stream.state = {"Last modified at":"AnyDate"}
     expected_params = {"lastModifiedDateTime":"AnyDate","page":5}
@@ -28,7 +28,7 @@ def test_request_params(mocker,patch_base_class):
 
 def test_next_page_token(patch_base_class):
 
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     response_mock = MagicMock()
     response_mock.json.return_value = {
         "totalElements": 20,
@@ -46,7 +46,7 @@ def test_next_page_token(patch_base_class):
 
 def test_parse_response(patch_base_class,mocker):
 
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     response = MagicMock
     response.content = b'{"content": [{"id": 1, "name": "John"}, {"id": 2, "name": "Jane"}]}'
 
@@ -58,7 +58,7 @@ def test_parse_response(patch_base_class,mocker):
 
 def test_request_headers(patch_base_class):
 
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     inputs = {"stream_slice": None, "stream_state": None, "next_page_token": None}
     stream.auth_token = "Token"
     expected_headers = {"auth-token":"Token"}
@@ -67,7 +67,7 @@ def test_request_headers(patch_base_class):
 
 def test_http_method(patch_base_class):
 
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     expected_method = "GET"
     assert stream.http_method == expected_method
 
@@ -85,13 +85,13 @@ def test_should_retry(patch_base_class, http_status, should_retry):
 
     response_mock = MagicMock()
     response_mock.status_code = http_status
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     assert stream.should_retry(response_mock) == should_retry
 
 
 def test_backoff_time(patch_base_class):
 
     response_mock = MagicMock()
-    stream = AvniDataStream(lastModifiedDateTime="",auth_token="",path="")
+    stream = AvniStream(start_date="",auth_token="",path="")
     expected_backoff_time = None
     assert stream.backoff_time(response_mock) == expected_backoff_time
