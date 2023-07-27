@@ -13,20 +13,34 @@ from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.models import SyncMode
 
 
-class AvniStream(HttpStream, ABC):
+class Avni(HttpStream, ABC):
 
     url_base = "https://app.avniproject.org/api/"
     primary_key = "ID"
     cursor_value = None
     current_page = 0
     last_record = None
-
-    def __init__(self, start_date: str, auth_token: str, **kwargs):
+    
+    def __init__(self, start_date: str, path , auth_token: str, **kwargs):
         super().__init__(**kwargs)
-        
+
         self.start_date = start_date
         self.auth_token = auth_token
+        self.stream=path
 
+
+class AvniStream(Avni,IncrementalMixin):
+
+    """
+    
+    This implement diffrent Stream in Source Avni
+    
+    Api docs : https://avni.readme.io/docs/api-guide
+    Api endpoints : https://app.swaggerhub.com/apis-docs/samanvay/avni-external/1.0.0
+    """
+    def path(self, **kwargs) -> str:
+        return self.stream
+    
     def request_params(
         self, stream_state: Mapping[str, Any], stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
     ) -> MutableMapping[str, Any]:
@@ -35,7 +49,11 @@ class AvniStream(HttpStream, ABC):
         if next_page_token:
             params.update(next_page_token)
         return params
-
+    
+    @property
+    def name(self) -> str:
+        return self.stream
+    
     def request_headers(
         self, stream_state: Mapping[str, Any], stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
     ) -> Mapping[str, Any]:
@@ -57,7 +75,6 @@ class AvniStream(HttpStream, ABC):
             if updated_last_date>self.state[self.cursor_field[1]]:
                 self.state = {self.cursor_field[1]: updated_last_date}
         self.last_record = None
-
         return None
 
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
@@ -74,9 +91,6 @@ class AvniStream(HttpStream, ABC):
         self.current_page = 0
 
         return None
-
-
-class IncrementalAvniStream(AvniStream, IncrementalMixin, ABC):
 
     state_checkpoint_interval = None
 
@@ -98,53 +112,9 @@ class IncrementalAvniStream(AvniStream, IncrementalMixin, ABC):
         self._state = value
 
 
-class Subjects(IncrementalAvniStream):
-    
-    """
-        This implement Subject Stream in Source Avni
-        Api docs : https://avni.readme.io/docs/api-guide
-        Api endpoints : https://app.swaggerhub.com/apis-docs/samanvay/avni-external/1.0.0
-    """
-    
-    def path(self, **kwargs) -> str:
-        return "subjects"
-
-
-class ProgramEnrolments(IncrementalAvniStream):
-    
-    """
-        This implement ProgramEnrolments Stream in Source Avni
-        Api docs : https://avni.readme.io/docs/api-guide
-        Api endpoints : https://app.swaggerhub.com/apis-docs/samanvay/avni-external/1.0.0
-    """
-    def path(self, **kwargs) -> str:
-        return "programEnrolments"
-
-
-class ProgramEncounters(IncrementalAvniStream):
-    
-    """
-        This implement ProgramEncounters Stream in Source Avni
-        Api docs : https://avni.readme.io/docs/api-guide
-        Api endpoints : https://app.swaggerhub.com/apis-docs/samanvay/avni-external/1.0.0
-    """
-    def path(self, **kwargs) -> str:
-        return "programEncounters"
-
-
-class Encounters(IncrementalAvniStream):
-    
-    """
-        This implement Encounters Stream in Source Avni
-        Api docs : https://avni.readme.io/docs/api-guide
-        Api endpoints : https://app.swaggerhub.com/apis-docs/samanvay/avni-external/1.0.0
-    """
-    def path(self, **kwargs) -> str:
-        return "encounters"
-
-
 class SourceAvni(AbstractSource):
     
+
     def get_client_id(self):
 
         url_client = "https://app.avniproject.org/idp-details"
@@ -160,9 +130,10 @@ class SourceAvni(AbstractSource):
             ClientId=app_client_id, AuthFlow="USER_PASSWORD_AUTH", AuthParameters={"USERNAME": username, "PASSWORD": password}
         )
         return response["AuthenticationResult"]["IdToken"]
-
+    
+    
     def check_connection(self, logger, config) -> Tuple[bool, any]:
-
+    
         username = config["username"]
         password = config["password"]
 
@@ -172,16 +143,18 @@ class SourceAvni(AbstractSource):
             return False, str(error) + ": Please connect With Avni Team"
 
         try:
+            
             auth_token = self.get_token(username, password, client_id)
             stream_kwargs = {"auth_token": auth_token, "start_date": config["start_date"]}
-            stream = Subjects(**stream_kwargs).read_records(SyncMode.full_refresh)
+            stream = AvniStream(path="subjects",**stream_kwargs).read_records(SyncMode.full_refresh)
             return True, None
         
         except Exception as error:
             return False, error
-
-    def streams(self, config: Mapping[str, Any]) -> List[Stream]:
-
+        
+    def generate_streams(self, config: str) -> List[Stream]:
+        
+        streams = []
         username = config["username"]
         password = config["password"]
 
@@ -192,12 +165,16 @@ class SourceAvni(AbstractSource):
             raise error
 
         auth_token = self.get_token(username, password, client_id)
+        
+        endpoints =["subjects","programEnrolments","programEncounters","encounters"]
+        for endpoint in endpoints:
+            stream_kwargs = {"auth_token": auth_token, "start_date": config["start_date"]}
+            stream=AvniStream(path=endpoint,**stream_kwargs)
+            streams.append(stream)
 
-        stream_kwargs = {"auth_token": auth_token, "start_date": config["start_date"]}
+        return streams
 
-        return [
-            Subjects(**stream_kwargs),
-            ProgramEnrolments(**stream_kwargs),
-            ProgramEncounters(**stream_kwargs),
-            Encounters(**stream_kwargs),
-        ]
+    def streams(self, config: Mapping[str, Any]) -> List[Stream]:
+
+        streams = self.generate_streams(config=config)
+        return streams
