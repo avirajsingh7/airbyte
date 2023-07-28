@@ -35,8 +35,7 @@
           "type": ["null", "number"]
         },
         "Y": {
-          "type": ["null", "number"],
-          "example": 74.7364501
+          "type": ["null", "number"]
         }
       }
     },
