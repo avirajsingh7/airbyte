@@ -1,21 +1,21 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_employee": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_order_state": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_order": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     }
   }

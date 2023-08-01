@@ -1,27 +1,27 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_product": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_product_attribute": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_supplier": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "product_supplier_reference": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "product_supplier_price_te": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

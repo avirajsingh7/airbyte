@@ -28,4 +28,3 @@ dependencies {
     integrationTestJavaImplementation files(project(':airbyte-integrations:bases:base-java').airbyteDocker.outputs)
     integrationTestJavaImplementation 'org.apache.commons:commons-lang3:3.11'
 }
-

@@ -14,8 +14,6 @@ MAIN_REQUIREMENTS = [
     "pydantic~=1.9",
     "PyGithub~=1.58.0",
     "rich",
-    "pydash~=7.0.4",
-    "google-cloud-storage~=2.8.0",
 ]
 
 
@@ -54,7 +52,6 @@ PIPELINES_REQUIREMENTS = [
     "semver",
     "airbyte-protocol-models",
     "tabulate",
-    "jinja2",
 ]
 
 setup(
@@ -72,13 +69,14 @@ setup(
         "qa_engine": MAIN_REQUIREMENTS + QA_ENGINE_REQUIREMENTS,
     },
     # python_requires=">=3.10", TODO upgrade all our CI packages + GHA env to 3.10
-    package_data={"ci_connector_ops.qa_engine": ["connector_adoption.sql"], "ci_connector_ops.pipelines.tests": ["templates/*.j2"]},
+    package_data={"ci_connector_ops.qa_engine": ["connector_adoption.sql"]},
     entry_points={
         "console_scripts": [
             "check-test-strictness-level = ci_connector_ops.acceptance_test_config_checks:check_test_strictness_level",
             "write-review-requirements-file = ci_connector_ops.acceptance_test_config_checks:write_review_requirements_file",
             "print-mandatory-reviewers = ci_connector_ops.acceptance_test_config_checks:print_mandatory_reviewers",
             "allowed-hosts-checks = ci_connector_ops.allowed_hosts_checks:check_allowed_hosts",
+            "run-qa-engine = ci_connector_ops.qa_engine.main:main",
             "run-qa-checks = ci_connector_ops.qa_checks:run_qa_checks",
             "airbyte-ci = ci_connector_ops.pipelines.commands.airbyte_ci:airbyte_ci",
         ],

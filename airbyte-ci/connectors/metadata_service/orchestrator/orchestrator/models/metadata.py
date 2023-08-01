@@ -1,6 +1,8 @@
 from metadata_service.models.generated.ConnectorMetadataDefinitionV0 import ConnectorMetadataDefinitionV0
-from pydantic import ValidationError, BaseModel
+from pydantic import ValidationError
 from dataclasses import dataclass
+
+from pydantic import ValidationError
 from typing import Tuple, Any, Optional
 
 
@@ -41,8 +43,7 @@ class MetadataDefinition(PydanticDictMixin, ConnectorMetadataDefinitionV0):
     pass
 
 
-class LatestMetadataEntry(BaseModel):
+@dataclass(frozen=True)
+class LatestMetadataEntry:
     metadata_definition: MetadataDefinition
     icon_url: Optional[str] = None
-    bucket_name: Optional[str] = None
-    file_path: Optional[str] = None

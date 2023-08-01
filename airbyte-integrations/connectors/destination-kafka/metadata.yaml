@@ -10,7 +10,7 @@ data:
   name: Kafka
   registries:
     cloud:
-      enabled: false # hide Kafka Destination https://github.com/airbytehq/airbyte-cloud/issues/2610
+      enabled: false
     oss:
       enabled: true
   releaseStage: alpha

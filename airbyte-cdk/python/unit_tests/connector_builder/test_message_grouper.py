@@ -9,15 +9,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from airbyte_cdk.connector_builder.message_grouper import MessageGrouper
 from airbyte_cdk.connector_builder.models import HttpRequest, HttpResponse, LogMessage, StreamRead, StreamReadPages
-from airbyte_cdk.models import (
-    AirbyteControlConnectorConfigMessage,
-    AirbyteControlMessage,
-    AirbyteLogMessage,
-    AirbyteMessage,
-    AirbyteRecordMessage,
-    Level,
-    OrchestratorType,
-)
+from airbyte_cdk.models import AirbyteLogMessage, AirbyteMessage, AirbyteRecordMessage, Level
 from airbyte_cdk.models import Type as MessageType
 from unit_tests.connector_builder.utils import create_configured_catalog
 
@@ -94,8 +86,7 @@ def test_get_grouped_messages(mock_entrypoint_read):
         "body": {"custom": "field"},
     }
     response = {"status_code": 200, "headers": {"field": "value"}, "body": '{"name": "field"}', "http_method": "GET"}
-    expected_schema = {"$schema": "http://json-schema.org/schema#", "properties": {"name": {"type": "string"}, "date": {"type": "string"}}, "type": "object"}
-    expected_datetime_fields = {"date":"%Y-%m-%d"}
+    expected_schema = {"$schema": "http://json-schema.org/schema#", "properties": {"name": {"type": "string"}}, "type": "object"}
     expected_pages = [
         StreamReadPages(
             request=HttpRequest(
@@ -106,7 +97,7 @@ def test_get_grouped_messages(mock_entrypoint_read):
                 http_method="GET",
             ),
             response=HttpResponse(status=200, headers={"field": "value"}, body='{"name": "field"}'),
-            records=[{"name": "Shinobu Kocho", "date": "2023-03-03"}, {"name": "Muichiro Tokito", "date": "2023-03-04"}],
+            records=[{"name": "Shinobu Kocho"}, {"name": "Muichiro Tokito"}],
         ),
         StreamReadPages(
             request=HttpRequest(
@@ -117,7 +108,7 @@ def test_get_grouped_messages(mock_entrypoint_read):
                 http_method="GET",
             ),
             response=HttpResponse(status=200, headers={"field": "value"}, body='{"name": "field"}'),
-            records=[{"name": "Mitsuri Kanroji", "date": "2023-03-05"}],
+            records=[{"name": "Mitsuri Kanroji"}],
         ),
     ]
 
@@ -125,11 +116,11 @@ def test_get_grouped_messages(mock_entrypoint_read):
         [
             request_log_message(request),
             response_log_message(response),
-            record_message("hashiras", {"name": "Shinobu Kocho", "date": "2023-03-03"}),
-            record_message("hashiras", {"name": "Muichiro Tokito", "date": "2023-03-04"}),
+            record_message("hashiras", {"name": "Shinobu Kocho"}),
+            record_message("hashiras", {"name": "Muichiro Tokito"}),
             request_log_message(request),
             response_log_message(response),
-            record_message("hashiras", {"name": "Mitsuri Kanroji", "date": "2023-03-05"}),
+            record_message("hashiras", {"name": "Mitsuri Kanroji"}),
         ]
     ))
 
@@ -139,7 +130,6 @@ def test_get_grouped_messages(mock_entrypoint_read):
     )
 
     assert actual_response.inferred_schema == expected_schema
-    assert actual_response.inferred_datetime_formats == expected_datetime_fields
 
     single_slice = actual_response.slices[0]
     for i, actual_page in enumerate(single_slice.pages):
@@ -473,9 +463,9 @@ def test_get_grouped_messages_with_many_slices(mock_entrypoint_read):
         )
     )
 
-    connector_builder_handler = MessageGrouper(MAX_PAGES_PER_SLICE, MAX_SLICES)
+    connecto_builder_handler = MessageGrouper(MAX_PAGES_PER_SLICE, MAX_SLICES)
 
-    stream_read: StreamRead = connector_builder_handler.get_message_groups(
+    stream_read: StreamRead = connecto_builder_handler.get_message_groups(
         source=mock_source, config=CONFIG, configured_catalog=create_configured_catalog("hashiras")
     )
 
@@ -540,64 +530,6 @@ def test_read_stream_returns_error_if_stream_does_not_exist():
     assert "ERROR" in actual_response.logs[0].level
 
 
-@patch('airbyte_cdk.connector_builder.message_grouper.AirbyteEntrypoint.read')
-def test_given_control_message_then_stream_read_has_config_update(mock_entrypoint_read):
-    updated_config = {"x": 1}
-    mock_source = make_mock_source(mock_entrypoint_read, iter(
-        any_request_and_response_with_a_record() + [connector_configuration_control_message(1, updated_config)]
-    ))
-    connector_builder_handler = MessageGrouper(MAX_PAGES_PER_SLICE, MAX_SLICES)
-    stream_read: StreamRead = connector_builder_handler.get_message_groups(
-        source=mock_source, config=CONFIG, configured_catalog=create_configured_catalog("hashiras")
-    )
-
-    assert stream_read.latest_config_update == updated_config
-
-
-@patch('airbyte_cdk.connector_builder.message_grouper.AirbyteEntrypoint.read')
-def test_given_multiple_control_messages_then_stream_read_has_latest_based_on_emitted_at(mock_entrypoint_read):
-    earliest = 0
-    earliest_config = {"earliest": 0}
-    latest = 1
-    latest_config = {"latest": 1}
-    mock_source = make_mock_source(mock_entrypoint_read, iter(
-        any_request_and_response_with_a_record() +
-        [
-            # here, we test that even if messages are emitted in a different order, we still rely on `emitted_at`
-            connector_configuration_control_message(latest, latest_config),
-            connector_configuration_control_message(earliest, earliest_config),
-        ]
-    )
-                                   )
-    connector_builder_handler = MessageGrouper(MAX_PAGES_PER_SLICE, MAX_SLICES)
-    stream_read: StreamRead = connector_builder_handler.get_message_groups(
-        source=mock_source, config=CONFIG, configured_catalog=create_configured_catalog("hashiras")
-    )
-
-    assert stream_read.latest_config_update == latest_config
-
-
-@patch('airbyte_cdk.connector_builder.message_grouper.AirbyteEntrypoint.read')
-def test_given_multiple_control_messages_with_same_timestamp_then_stream_read_has_latest_based_on_message_order(mock_entrypoint_read):
-    emitted_at = 0
-    earliest_config = {"earliest": 0}
-    latest_config = {"latest": 1}
-    mock_source = make_mock_source(mock_entrypoint_read, iter(
-        any_request_and_response_with_a_record() +
-        [
-            connector_configuration_control_message(emitted_at, earliest_config),
-            connector_configuration_control_message(emitted_at, latest_config),
-        ]
-    )
-                                   )
-    connector_builder_handler = MessageGrouper(MAX_PAGES_PER_SLICE, MAX_SLICES)
-    stream_read: StreamRead = connector_builder_handler.get_message_groups(
-        source=mock_source, config=CONFIG, configured_catalog=create_configured_catalog("hashiras")
-    )
-
-    assert stream_read.latest_config_update == latest_config
-
-
 def make_mock_source(mock_entrypoint_read, return_value: Iterator) -> MagicMock:
     mock_source = MagicMock()
     mock_entrypoint_read.return_value = return_value
@@ -618,22 +550,3 @@ def record_message(stream: str, data: dict) -> AirbyteMessage:
 
 def slice_message(slice_descriptor: str = '{"key": "value"}') -> AirbyteMessage:
     return AirbyteMessage(type=MessageType.LOG, log=AirbyteLogMessage(level=Level.INFO, message="slice:" + slice_descriptor))
-
-
-def connector_configuration_control_message(emitted_at: float, config: dict) -> AirbyteMessage:
-    return AirbyteMessage(
-        type=MessageType.CONTROL,
-        control=AirbyteControlMessage(
-            type=OrchestratorType.CONNECTOR_CONFIG,
-            emitted_at=emitted_at,
-            connectorConfig=AirbyteControlConnectorConfigMessage(config=config),
-        )
-    )
-
-
-def any_request_and_response_with_a_record():
-    return [
-        request_log_message({"request": 1}),
-        response_log_message({"response": 2}),
-        record_message("hashiras", {"name": "Shinobu Kocho"}),
-    ]

@@ -1,8 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Conversation Export",
-  "additionalProperties": true,
   "type": ["null", "object"],
+  "required": ["id", "created_at", "initial_channel", "requester_id"],
   "properties": {
     "id": {
       "type": ["null", "integer"]
@@ -147,13 +145,6 @@
         "type": ["null", "string"]
       }
     },
-    "tags_info": {
-      "type": ["null", "array"],
-      "items": {
-        "type": ["null", "object"],
-        "additionalProperties": true
-      }
-    },
     "conversation_wrapup_notes": {
       "type": ["null", "array"],
       "items": {
@@ -170,9 +161,6 @@
       "type": ["null", "string"]
     },
     "status": {
-      "type": ["null", "string"]
-    },
-    "transferee_number": {
       "type": ["null", "string"]
     },
     "updated_at": {
@@ -192,30 +180,6 @@
     },
     "anonymized_at": {
       "type": ["null", "integer"]
-    },
-    "custom_fields": {
-      "type": ["null", "array"],
-      "items": {
-        "type": ["null", "object"],
-        "additionalProperties": true,
-        "properties": {
-          "attribute_id": {
-            "type": ["null", "string"]
-          },
-          "identifier": {
-            "type": ["null", "string"]
-          },
-          "value": {
-            "type": ["null", "array", "string"]
-          },
-          "data_type": {
-            "type": ["null", "string"]
-          },
-          "archived": {
-            "type": ["null", "boolean"]
-          }
-        }
-      }
     }
   }
 }

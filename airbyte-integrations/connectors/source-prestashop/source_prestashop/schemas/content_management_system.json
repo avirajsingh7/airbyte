@@ -1,39 +1,39 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_cms_category": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "position": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "indexation": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_keywords": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_title": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "head_seo_title": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "link_rewrite": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "content": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

@@ -7,11 +7,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -20,11 +19,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -33,11 +31,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -46,11 +43,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"], ["deviceCategory"], ["operatingSystem"], ["browser"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"], ["deviceCategory"], ["operatingSystem"], ["browser"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -59,11 +55,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["region"], ["country"], ["city"], ["date"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["region"], ["country"], ["city"], ["date"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -72,11 +67,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"], ["hostName"], ["pagePathPlusQueryString"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"], ["hostName"], ["pagePathPlusQueryString"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -85,11 +79,10 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"], ["sessionSource"], ["sessionMedium"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"], ["sessionSource"], ["sessionMedium"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
@@ -98,33 +91,30 @@
         "supported_sync_modes": ["full_refresh", "incremental"],
         "source_defined_cursor": true,
         "default_cursor_field": ["date"],
-        "source_defined_primary_key": [["property_id"], ["date"]]
+        "source_defined_primary_key": [["uuid"]]
       },
-      "sync_mode": "incremental",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["date"]]
+      "sync_mode": "full_refresh",
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
         "name": "cohort_report",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh"],
-        "source_defined_primary_key": [["property_id"], ["cohort"], ["cohortNthDay"]]
+        "source_defined_primary_key": [["uuid"]]
       },
       "sync_mode": "full_refresh",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["cohort"], ["cohortNthDay"]]
+      "destination_sync_mode": "overwrite"
     },
     {
       "stream": {
         "name": "pivot_report",
         "json_schema": {},
         "supported_sync_modes": ["full_refresh"],
-        "source_defined_primary_key": [["property_id"], ["browser"], ["country"], ["language"], ["startDate"], ["endDate"]]
+        "source_defined_primary_key": [["uuid"]]
       },
       "sync_mode": "full_refresh",
-      "destination_sync_mode": "overwrite",
-      "primary_key": [["property_id"], ["browser"], ["country"], ["language"], ["startDate"], ["endDate"]]
+      "destination_sync_mode": "overwrite"
     }
   ]
 }

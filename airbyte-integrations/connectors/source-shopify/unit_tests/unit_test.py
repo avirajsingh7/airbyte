@@ -47,7 +47,6 @@ def test_privileges_validation(requests_mock, basic_config):
         "shop",
         "tender_transactions",
         "transactions",
-        "countries",
     ]
 
     assert [stream.name for stream in source.streams(basic_config)] == expected

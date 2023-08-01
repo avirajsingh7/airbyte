@@ -24,7 +24,7 @@ class ConnectorRunner:
         connector_configuration_path: Optional[Path] = None,
         custom_environment_variables: Optional[Mapping] = {},
     ):
-        self._client = docker.from_env(timeout=120)
+        self._client = docker.from_env()
         try:
             self._image = self._client.images.get(image_name)
         except docker.errors.ImageNotFound:
@@ -183,10 +183,6 @@ class ConnectorRunner:
     def env_variables(self):
         env_vars = self._image.attrs["Config"]["Env"]
         return {env.split("=", 1)[0]: env.split("=", 1)[1] for env in env_vars}
-
-    @property
-    def labels(self):
-        return self._image.labels
 
     @property
     def entry_point(self):

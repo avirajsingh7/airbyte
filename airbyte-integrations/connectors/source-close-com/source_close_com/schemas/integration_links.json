@@ -1,7 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
   "type": ["null", "object"],
-  "additionalProperties": true,
   "properties": {
     "date_created": {
       "type": ["null", "string"]

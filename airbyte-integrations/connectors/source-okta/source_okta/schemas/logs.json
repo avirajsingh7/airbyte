@@ -121,9 +121,6 @@
       },
       "type": ["object", "null"]
     },
-    "device": {
-      "type": ["string", "null"]
-    },
     "displayMessage": {
       "type": ["string", "null"]
     },

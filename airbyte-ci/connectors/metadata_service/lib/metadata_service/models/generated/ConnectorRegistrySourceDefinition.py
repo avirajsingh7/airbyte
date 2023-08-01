@@ -7,7 +7,7 @@ from datetime import date
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
-from pydantic import AnyUrl, BaseModel, Extra, Field, constr
+from pydantic import BaseModel, Extra, Field
 from typing_extensions import Literal
 
 
@@ -65,39 +65,12 @@ class SuggestedStreams(BaseModel):
     )
 
 
-class VersionBreakingChange(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    upgradeDeadline: date = Field(
-        ...,
-        description="The deadline by which to upgrade before the breaking change takes effect.",
-    )
-    message: str = Field(
-        ..., description="Descriptive message detailing the breaking change."
-    )
-    migrationDocumentationUrl: Optional[AnyUrl] = Field(
-        None,
-        description="URL to documentation on how to migrate to the current version. Defaults to ${documentationUrl}-migrations#${version}",
-    )
-
-
 class JobTypeResourceLimit(BaseModel):
     class Config:
         extra = Extra.forbid
 
     jobType: JobType
     resourceRequirements: ResourceRequirements
-
-
-class ConnectorBreakingChanges(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    __root__: Dict[constr(regex=r"^\d+\.\d+\.\d+$"), VersionBreakingChange] = Field(
-        ...,
-        description="Each entry denotes a breaking change in a specific version of a connector that requires user action to upgrade.",
-    )
 
 
 class ActorDefinitionResourceRequirements(BaseModel):
@@ -109,17 +82,6 @@ class ActorDefinitionResourceRequirements(BaseModel):
         description="if set, these are the requirements that should be set for ALL jobs run for this actor definition.",
     )
     jobSpecific: Optional[List[JobTypeResourceLimit]] = None
-
-
-class ConnectorReleases(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    breakingChanges: ConnectorBreakingChanges
-    migrationDocumentationUrl: Optional[AnyUrl] = Field(
-        None,
-        description="URL to documentation on how to migrate from the previous version to the current version. Defaults to ${documentationUrl}-migrations",
-    )
 
 
 class ConnectorRegistrySourceDefinition(BaseModel):
@@ -161,4 +123,3 @@ class ConnectorRegistrySourceDefinition(BaseModel):
         None,
         description="Number of seconds allowed between 2 airbyte protocol messages. The source will timeout if this delay is reach",
     )
-    releases: Optional[ConnectorReleases] = None

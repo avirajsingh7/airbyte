@@ -23,7 +23,6 @@ jobs:
           permission: write
           commands: |
             test
-            legacy-test
             test-performance
             build-connector
             publish-connector

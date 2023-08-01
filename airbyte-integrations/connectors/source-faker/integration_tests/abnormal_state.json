@@ -3,7 +3,7 @@
     "type": "STREAM",
     "stream": {
       "stream_state": {
-        "updated_at": 11
+        "id": 11
       },
       "stream_descriptor": {
         "name": "users"
@@ -14,7 +14,7 @@
     "type": "STREAM",
     "stream": {
       "stream_state": {
-        "updated_at": 11
+        "user_id": 11
       },
       "stream_descriptor": {
         "name": "purchases"
@@ -25,7 +25,7 @@
     "type": "STREAM",
     "stream": {
       "stream_state": {
-        "updated_at": 101
+        "id": 101
       },
       "stream_descriptor": {
         "name": "products"

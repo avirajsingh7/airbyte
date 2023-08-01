@@ -12,7 +12,6 @@ connectionSpecification:
       type: string
       description: API Key
       title: API Bearer Token
-      airbyte_secret: true
     url:
       type: string
       description: URL

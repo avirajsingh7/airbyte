@@ -10,7 +10,7 @@ data:
   name: Lever Hiring
   registries:
     cloud:
-      enabled: true
+      enabled: false
     oss:
       enabled: true
   releaseStage: alpha

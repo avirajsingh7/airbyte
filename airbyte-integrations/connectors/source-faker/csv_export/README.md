@@ -21,13 +21,14 @@ But let's assume we don't have 1TB of local hard disk. So, we want to make 10 ch
 ```json
 {
   "count": 2039840637,
-  "seed": 0
+  "seed": 0,
+  "records_per_sync": 203984064
 }
 ```
 
 **`state.json`**
 
-At the end of every sync, increment the `id` in the users stream and the `user_id` in the purchases stream by `203984064`
+At the end of every sync, increment the `id` in the users stream and the `user_id` in the purchases stream by `203984064`, the `records_per_sync` chunk size
 
 ```json
 [

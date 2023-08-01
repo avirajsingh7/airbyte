@@ -20,6 +20,7 @@ const config = {
   projectName: "airbyte", // Usually your repo name.
 
   plugins: [
+    [require.resolve("@cmfcmf/docusaurus-search-local"), { indexBlog: false }],
     [
       "@docusaurus/plugin-client-redirects",
       {
@@ -138,11 +139,6 @@ const config = {
           autoCollapseCategories: true,
         },
       },
-      algolia: {
-          appId: 'OYKDBC51MU',
-          apiKey: '15c487fd9f7722282efd8fcb76746fce', // Public API key: it is safe to commit it
-          indexName: 'airbyte',
-      },
       navbar: {
         title: "",
         logo: {
@@ -169,7 +165,7 @@ const config = {
             position: "left",
           },
           {
-            href: "https://support.airbyte.com/",
+            href: "https://discuss.airbyte.io/",
             label: "Support",
             position: "left",
           },

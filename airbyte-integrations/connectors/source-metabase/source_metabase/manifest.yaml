@@ -39,6 +39,11 @@ definitions:
     primary_key: "id"
     retriever:
       $ref: "#/definitions/retriever"
+  activity_stream:
+    $ref: "#/definitions/base_stream"
+    $parameters:
+      name: "activity"
+      path: "activity"
   cards_stream:
     $ref: "#/definitions/base_stream"
     $parameters:
@@ -62,6 +67,7 @@ definitions:
       name: "users"
       path: "user"
 streams:
+  - "#/definitions/activity_stream"
   - "#/definitions/cards_stream"
   - "#/definitions/collections_stream"
   - "#/definitions/dashboards_stream"
@@ -69,4 +75,4 @@ streams:
 
 check:
   stream_names:
-    - "dashboards"
+    - "activity"

@@ -14,7 +14,7 @@ data:
     oss:
       enabled: true
   releaseStage: alpha
-  documentationUrl: https://docs.airbyte.com/integrations/destinations/sqlite
+  documentationUrl: https://docs.airbyte.com/integrations/destinations/local-sqlite
   tags:
     - language:python
 metadataSpecVersion: "1.0"

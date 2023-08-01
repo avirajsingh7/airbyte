@@ -10,7 +10,7 @@ data:
   name: Scylla
   registries:
     cloud:
-      enabled: false # hide Scylla Destination https://github.com/airbytehq/airbyte-cloud/issues/2617
+      enabled: true
     oss:
       enabled: true
   releaseStage: alpha

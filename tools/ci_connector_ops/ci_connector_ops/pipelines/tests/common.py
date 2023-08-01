@@ -31,20 +31,14 @@ class VersionCheck(Step, ABC):
         return f"{self.GITHUB_URL_PREFIX_FOR_CONNECTORS}/{self.context.connector.technical_name}/{METADATA_FILE_NAME}"
 
     @cached_property
-    def master_metadata(self) -> Optional[dict]:
+    def master_metadata(self) -> dict:
         response = requests.get(self.github_master_metadata_url)
-
-        # New connectors will not have a metadata file in master
-        if not response.ok:
-            return None
+        response.raise_for_status()
         return yaml.safe_load(response.text)
 
     @property
     def master_connector_version(self) -> semver.Version:
         metadata = self.master_metadata
-        if not metadata:
-            return semver.Version.parse("0.0.0")
-
         return semver.Version.parse(str(metadata["data"]["dockerImageTag"]))
 
     @property
@@ -75,7 +69,7 @@ class VersionCheck(Step, ABC):
 
 
 class VersionIncrementCheck(VersionCheck):
-    title = "Connector version increment check"
+    title = "Connector version increment check."
 
     BYPASS_CHECK_FOR = [
         METADATA_FILE_NAME,
@@ -110,7 +104,7 @@ class VersionIncrementCheck(VersionCheck):
 
 
 class VersionFollowsSemverCheck(VersionCheck):
-    title = "Connector version semver check"
+    title = "Connector version semver check."
 
     @property
     def failure_message(self) -> str:
@@ -167,7 +161,6 @@ class QaChecks(Step):
             .with_workdir("/airbyte")
             .with_exec(["run-qa-checks", f"connectors/{self.context.connector.technical_name}"])
         )
-
         return await self.get_step_result(qa_checks)
 
 
@@ -200,7 +193,5 @@ class AcceptanceTests(PytestStep):
                 if file_path.startswith("updated_configurations"):
                     self.context.updated_secrets_dir = secret_dir
                     break
-        logs = soon_cat_container_stdout.value
-        if self.context.is_local:
-            await self.write_log_file(logs)
-        return self.pytest_logs_to_step_result(logs)
+
+        return self.pytest_logs_to_step_result(soon_cat_container_stdout.value)

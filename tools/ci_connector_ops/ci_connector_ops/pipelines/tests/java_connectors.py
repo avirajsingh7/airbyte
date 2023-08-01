@@ -7,7 +7,7 @@
 from typing import List, Optional
 
 import anyio
-from ci_connector_ops.pipelines.actions import environments, secrets
+from ci_connector_ops.pipelines.actions import environments, run_steps, secrets
 from ci_connector_ops.pipelines.bases import StepResult, StepStatus
 from ci_connector_ops.pipelines.builds import LOCAL_BUILD_PLATFORM
 from ci_connector_ops.pipelines.builds.java_connectors import BuildConnectorDistributionTar, BuildConnectorImage
@@ -19,26 +19,31 @@ from ci_connector_ops.pipelines.utils import export_container_to_tarball
 from dagger import File, QueryError
 
 
-class IntegrationTest(GradleTask):
+class UnitTests(GradleTask):
+    title = "Unit tests"
+    gradle_task_name = "test"
+
+
+class IntegrationTestJava(GradleTask):
     """A step to run integrations tests for Java connectors using the integrationTestJava Gradle task."""
 
-    gradle_task_name = "integrationTest"
-    DEFAULT_TASKS_TO_EXCLUDE = ["airbyteDocker"]
-
-    @property
-    def title(self) -> str:
-        return f"./gradlew :airbyte-integrations:connectors:{self.context.connector.technical_name}:{self.gradle_task_name}"
+    title = "Integration tests"
+    gradle_task_name = "integrationTestJava"
 
     async def _load_normalization_image(self, normalization_tar_file: File):
         normalization_image_tag = f"{self.context.connector.normalization_repository}:dev"
         self.context.logger.info("Load the normalization image to the docker host.")
-        await environments.load_image_to_docker_host(self.context, normalization_tar_file, normalization_image_tag)
+        await environments.load_image_to_docker_host(
+            self.context, normalization_tar_file, normalization_image_tag, docker_service_name=self.docker_service_name
+        )
         self.context.logger.info("Successfully loaded the normalization image to the docker host.")
 
     async def _load_connector_image(self, connector_tar_file: File):
         connector_image_tag = f"airbyte/{self.context.connector.technical_name}:dev"
         self.context.logger.info("Load the connector image to the docker host")
-        await environments.load_image_to_docker_host(self.context, connector_tar_file, connector_image_tag)
+        await environments.load_image_to_docker_host(
+            self.context, connector_tar_file, connector_image_tag, docker_service_name=self.docker_service_name
+        )
         self.context.logger.info("Successfully loaded the connector image to the docker host.")
 
     async def _run(self, connector_tar_file: File, normalization_tar_file: Optional[File]) -> StepResult:
@@ -66,7 +71,7 @@ async def run_all_tests(context: ConnectorContext) -> List[StepResult]:
     Returns:
         List[StepResult]: The results of all the tests steps.
     """
-    context.connector_secrets = await secrets.get_connector_secrets(context)
+    context.secrets_dir = await secrets.get_connector_secret_dir(context)
     step_results = []
     build_distribution_tar_results = await BuildConnectorDistributionTar(context).run()
     step_results.append(build_distribution_tar_results)
@@ -78,6 +83,11 @@ async def run_all_tests(context: ConnectorContext) -> List[StepResult]:
     )
     step_results.append(build_connector_image_results)
     if build_connector_image_results.status is StepStatus.FAILURE:
+        return step_results
+
+    unit_tests_results = await UnitTests(context).run()
+    step_results.append(unit_tests_results)
+    if unit_tests_results.status is StepStatus.FAILURE:
         return step_results
 
     if context.connector.supports_normalization:
@@ -94,9 +104,10 @@ async def run_all_tests(context: ConnectorContext) -> List[StepResult]:
 
     connector_image_tar_file, _ = await export_container_to_tarball(context, build_connector_image_results.output_artifact)
 
-    integration_tests_results = await IntegrationTest(context).run(connector_image_tar_file, normalization_tar_file)
-    step_results.append(integration_tests_results)
-
-    acceptance_tests_results = await AcceptanceTests(context).run(connector_image_tar_file)
-    step_results.append(acceptance_tests_results)
-    return step_results
+    return await run_steps(
+        [
+            (IntegrationTestJava(context), (connector_image_tar_file, normalization_tar_file)),
+            (AcceptanceTests(context), (connector_image_tar_file)),
+        ],
+        results=step_results,
+    )

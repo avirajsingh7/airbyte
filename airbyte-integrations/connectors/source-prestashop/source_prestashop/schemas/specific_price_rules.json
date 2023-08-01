@@ -1,45 +1,45 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_shop": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_country": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_group": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "from_quantity": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "price": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_tax": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_type": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "from": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "to": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

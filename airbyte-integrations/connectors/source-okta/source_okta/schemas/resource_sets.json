@@ -9,14 +9,6 @@
     "description": {
       "type": "string"
     },
-    "created": {
-      "format": "date-time",
-      "type": ["string", "null"]
-    },
-    "lastUpdated": {
-      "format": "date-time",
-      "type": ["string", "null"]
-    },
     "_links": {
       "properties": {
         "assignee": {

@@ -3,10 +3,9 @@
 #
 
 import logging
-from typing import Union
 
 import pendulum
-from pendulum import Date, DateTime
+from pendulum import DateTime
 
 logger = logging.getLogger("airbyte")
 
@@ -15,20 +14,11 @@ logger = logging.getLogger("airbyte")
 # HTTP response.
 # https://developers.facebook.com/docs/marketing-api/reference/ad-account/insights/#overview
 DATA_RETENTION_PERIOD = 37
-DateOrDateTime = Union[Date, DateTime]
 
 
-def cast_to_type(input_date: DateOrDateTime, target_date: DateOrDateTime) -> DateOrDateTime:
-    # casts `target_date` to the type of `input_date`
-    if type(target_date) == type(input_date):
-        return target_date
-    if isinstance(target_date, DateTime):
-        return target_date.date()
-    return pendulum.datetime(target_date.year, target_date.month, target_date.day)
-
-
-def validate_start_date(start_date: DateOrDateTime) -> DateOrDateTime:
-    today = cast_to_type(start_date, pendulum.today())
+def validate_start_date(start_date: DateTime) -> DateTime:
+    now = pendulum.now(tz=start_date.tzinfo)
+    today = now.replace(microsecond=0, second=0, minute=0, hour=0)
     retention_date = today.subtract(months=DATA_RETENTION_PERIOD)
     if retention_date.day != today.day:
         # `.subtract(months=37)` can be erroneous, for instance:
@@ -36,24 +26,20 @@ def validate_start_date(start_date: DateOrDateTime) -> DateOrDateTime:
         # that's why we're adjusting the date to the 1st day of the next month
         retention_date = retention_date.replace(month=retention_date.month + 1, day=1)
 
-    # FB does not provide precise description of how we should calculate the 37 months datetime difference.
-    # As timezone difference can result in an additional time delta, this is a reassurance we stay inside the 37 months limit.
-    retention_date = retention_date.add(days=1)
-
-    if start_date > today:
+    if start_date > now:
         message = f"The start date cannot be in the future. Set start date to today's date - {today}."
         logger.warning(message)
-        return cast_to_type(start_date, today)
+        return today
     elif start_date < retention_date:
         message = (
             f"The start date cannot be beyond {DATA_RETENTION_PERIOD} months from the current date. Set start date to {retention_date}."
         )
         logger.warning(message)
-        return cast_to_type(start_date, retention_date)
+        return retention_date
     return start_date
 
 
-def validate_end_date(start_date: DateOrDateTime, end_date: DateOrDateTime) -> DateOrDateTime:
+def validate_end_date(start_date: DateTime, end_date: DateTime) -> DateTime:
     if start_date > end_date:
         message = f"The end date must be after start date. Set end date to {start_date}."
         logger.warning(message)

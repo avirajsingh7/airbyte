@@ -74,9 +74,6 @@
     },
     "mandatory_flag": {
       "type": ["null", "boolean"]
-    },
-    "display_name": {
-      "type": ["null", "string"]
     }
   }
 }

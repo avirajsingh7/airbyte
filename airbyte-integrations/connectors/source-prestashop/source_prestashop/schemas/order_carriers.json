@@ -1,33 +1,33 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_order": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_carrier": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_order_invoice": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "weight": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shipping_cost_tax_excl": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shipping_cost_tax_incl": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "tracking_number": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     }
   }

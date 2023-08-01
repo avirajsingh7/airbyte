@@ -1,45 +1,45 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "names": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "symbol": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "iso_code": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "numeric_iso_code": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "precision": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "conversion_rate": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "deleted": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "unofficial": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "modified": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "pattern": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }
