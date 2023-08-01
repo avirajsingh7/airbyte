@@ -114,22 +114,6 @@ class Tables(CodaStreamDoc):
         return f"docs/{doc_id}/tables"
 
 
-class Rows(CodaStreamDoc):
-
-    primary_key = "id"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def path(
-        self, stream_state: Mapping[str, Any] = None, stream_slice: Mapping[str, Any] = None, next_page_token: Mapping[str, Any] = None
-    ) -> str:
-        doc_id = stream_slice["doc_id"]
-        tableid_or_name = stream_slice["tableid"]
-
-        return f"docs/{doc_id}/tables/${tableid_or_name}/rows"
-
-
 class Formulas(CodaStreamDoc):
 
     primary_key = "id"
@@ -167,8 +151,6 @@ class SourceCoda(AbstractSource):
             r = requests.get(f"{BASE_URL}whoami", headers=headers)
             if r.status_code == 200:
                 return True, None
-            else:
-                r.raise_for_status()
         except Exception as e:
             return False, e
 
@@ -185,5 +167,4 @@ class SourceCoda(AbstractSource):
             Tables(**stream_args),
             Formulas(**stream_args),
             Controls(**stream_args),
-            Rows(**stream_args),
         ]

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from setuptools import find_packages, setup
 
-MAIN_REQUIREMENTS = ["requests", "click~=8.1.3", "pyyaml"]
+MAIN_REQUIREMENTS = ["requests", "click~=8.1.3"]
 
 
 def local_pkg(name: str) -> str:
@@ -21,7 +21,7 @@ LOCAL_REQUIREMENTS = [local_pkg("ci_common_utils")]
 TEST_REQUIREMENTS = ["requests-mock", "pytest"]
 
 setup(
-    version="1.1.0",
+    version="1.0.1",
     name="ci_credentials",
     description="CLI tooling to read and manage GSM secrets",
     author="Airbyte",

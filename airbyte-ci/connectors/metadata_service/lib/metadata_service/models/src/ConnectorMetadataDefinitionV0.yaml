@@ -84,7 +84,6 @@ properties:
         description: "An array of tags that describe the connector. E.g: language:python, keyword:rds, etc."
         items:
           type: string
-        default: []
       registries:
         anyOf:
           - type: object
@@ -99,8 +98,6 @@ properties:
 
       allowedHosts:
         "$ref": AllowedHosts.yaml
-      releases:
-        "$ref": ConnectorReleases.yaml
       normalizationConfig:
         "$ref": NormalizationDestinationDefinitionConfig.yaml
       suggestedStreams:

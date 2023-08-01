@@ -11,11 +11,6 @@
       "type": "string",
       "format": "date-time",
       "airbyte_type": "timestamp_with_timezone"
-    },
-    "updated_at": {
-      "type": "string",
-      "format": "date-time",
-      "airbyte_type": "timestamp_with_timezone"
     }
   }
 }

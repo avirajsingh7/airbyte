@@ -32,10 +32,6 @@ public class StreamAwareQueue {
   }
 
   public Optional<Instant> getTimeOfLastMessage() {
-    // if the queue is empty, the time of last message is irrelevant
-    if (size() == 0) {
-      return Optional.empty();
-    }
     return Optional.ofNullable(timeOfLastMessage.get());
   }
 

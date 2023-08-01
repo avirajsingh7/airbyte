@@ -2,11 +2,11 @@ data:
   connectorSubtype: api
   connectorType: source
   definitionId: 9da77001-af33-4bcd-be46-6252bf9342b9
-  dockerImageTag: 0.5.0
+  dockerImageTag: 0.3.4
   dockerRepository: airbyte/source-shopify
   githubIssueLabel: source-shopify
   icon: shopify.svg
-  license: ELv2
+  license: MIT
   name: Shopify
   registries:
     cloud:

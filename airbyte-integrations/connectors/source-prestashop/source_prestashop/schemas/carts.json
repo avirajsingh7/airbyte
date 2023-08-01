@@ -1,64 +1,64 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_address_delivery": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_address_invoice": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_customer": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_guest": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_lang": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop_group": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_carrier": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "recyclable": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "gift": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "gift_message": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "mobile_theme": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "delivery_option": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "secure_key": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "allow_seperated_package": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_upd": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "associations": {
@@ -70,19 +70,19 @@
             "type": "object",
             "properties": {
               "id_product": {
-                "type": ["null", "string"]
+                "type": "string"
               },
               "id_product_attribute": {
-                "type": ["null", "string"]
+                "type": "string"
               },
               "id_address_delivery": {
-                "type": ["null", "string"]
+                "type": "string"
               },
               "id_customization": {
-                "type": ["null", "string"]
+                "type": "string"
               },
               "quantity": {
-                "type": ["null", "string"]
+                "type": "string"
               }
             }
           }

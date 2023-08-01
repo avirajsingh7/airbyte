@@ -1,41 +1,41 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "link_rewrite": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_upd": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "short_description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_title": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_keywords": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "associations": {
       "type": "object",
@@ -46,7 +46,7 @@
             "type": "object",
             "properties": {
               "id": {
-                "type": ["null", "string"]
+                "type": "string"
               }
             }
           }

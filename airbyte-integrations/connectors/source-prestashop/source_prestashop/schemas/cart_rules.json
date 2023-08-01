@@ -1,112 +1,112 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_customer": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_from": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_to": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "quantity": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "quantity_per_user": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "priority": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "partial_use": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "code": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "minimum_amount": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "minimum_amount_tax": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "minimum_amount_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "minimum_amount_shipping": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "country_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "carrier_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "group_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "cart_rule_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "product_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shop_restriction": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "free_shipping": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_percent": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_amount": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_tax": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_product": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reduction_exclude_special": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "gift_product": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "gift_product_attribute": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "highlight": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_upd": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

@@ -1,15 +1,15 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_lang": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "last_passwd_gen": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "stats_date_from": {
       "type": ["null", "string"],
@@ -28,28 +28,28 @@
       "format": "date"
     },
     "passwd": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "lastname": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "firstname": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "email": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_profile": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "bo_color": {
       "type": ["null", "string"]
     },
     "default_tab": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "bo_theme": {
       "type": ["null", "string"]
@@ -58,25 +58,25 @@
       "type": ["null", "string"]
     },
     "bo_width": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "bo_menu": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "stats_compare_option": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "preselect_date_range": {
       "type": ["null", "string"]
     },
     "id_last_order": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_last_customer_message": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_last_customer": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "reset_password_token": {
       "type": ["null", "string"]

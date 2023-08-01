@@ -1,56 +1,56 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_parent": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "level_depth": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "nb_products_recursive": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop_default": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "is_root_category": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "position": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_upd": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "link_rewrite": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_title": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_description": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "meta_keywords": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "associations": {
       "type": "object",
@@ -61,7 +61,7 @@
             "type": "object",
             "properties": {
               "id": {
-                "type": ["null", "string"]
+                "type": "string"
               }
             }
           }

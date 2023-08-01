@@ -1,42 +1,42 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_zone": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_currency": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "call_prefix": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "iso_code": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "contains_states": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "need_identification_number": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "need_zip_code": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "zip_code_format": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "display_tax_label": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

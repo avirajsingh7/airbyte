@@ -122,15 +122,4 @@ public final class PostgresCatalogHelper {
     return publicizedTables;
   }
 
-  /**
-   * This method is used for xmin synsc in order to overwrite sync modes for cursor fields. For xmin, we want streams to only have incremental mode
-   * enabled.
-   *
-   * @param stream - airbyte stream
-   * @return will return list of sync modes
-   */
-  public static AirbyteStream overrideSyncModesForXmin(final AirbyteStream stream) {
-    return stream.withSupportedSyncModes(Lists.newArrayList(SyncMode.INCREMENTAL));
-  }
-
 }

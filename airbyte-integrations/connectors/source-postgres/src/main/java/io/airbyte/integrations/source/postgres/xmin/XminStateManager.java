@@ -4,6 +4,7 @@
 
 package io.airbyte.integrations.source.postgres.xmin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.airbyte.commons.exceptions.ConfigErrorException;
 import io.airbyte.commons.json.Jsons;
 import io.airbyte.integrations.source.postgres.internal.models.XminStatus;
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 public class XminStateManager {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XminStateManager.class);
-  public static final long XMIN_STATE_VERSION = 2L;
 
   private final Map<AirbyteStreamNameNamespacePair, XminStatus> pairToXminStatus;
 
@@ -73,28 +73,23 @@ public class XminStateManager {
    * @return AirbyteMessage which includes information on state of records read so far
    */
   public static AirbyteMessage createStateMessage(final AirbyteStreamNameNamespacePair pair, final XminStatus xminStatus) {
-    final AirbyteStateMessage stateMessage = getAirbyteStateMessage(pair, xminStatus);
-
-    return new AirbyteMessage()
-        .withType(Type.STATE)
-        .withState(stateMessage);
-  }
-
-  public static AirbyteStateMessage getAirbyteStateMessage(final AirbyteStreamNameNamespacePair pair, final XminStatus xminStatus) {
     final AirbyteStreamState airbyteStreamState =
         new AirbyteStreamState()
             .withStreamDescriptor(
                 new StreamDescriptor()
                     .withName(pair.getName())
                     .withNamespace(pair.getNamespace()))
-            .withStreamState(Jsons.jsonNode(xminStatus));
+            .withStreamState(new ObjectMapper().valueToTree(xminStatus));
 
     // Set state
     final AirbyteStateMessage stateMessage =
         new AirbyteStateMessage()
             .withType(AirbyteStateType.STREAM)
             .withStream(airbyteStreamState);
-    return stateMessage;
+
+    return new AirbyteMessage()
+        .withType(Type.STATE)
+        .withState(stateMessage);
   }
 
 }

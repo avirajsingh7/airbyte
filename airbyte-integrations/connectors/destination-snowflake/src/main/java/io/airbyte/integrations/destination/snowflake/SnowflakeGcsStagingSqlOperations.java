@@ -63,7 +63,7 @@ public class SnowflakeGcsStagingSqlOperations extends SnowflakeSqlOperations imp
 
   @Override
   public String getStageName(final String namespace, final String streamName) {
-    return nameTransformer.applyDefaultCase(String.join(".",
+    return nameTransformer.applyDefaultCase(String.join("_",
         nameTransformer.convertStreamName(namespace),
         nameTransformer.convertStreamName(streamName)));
   }

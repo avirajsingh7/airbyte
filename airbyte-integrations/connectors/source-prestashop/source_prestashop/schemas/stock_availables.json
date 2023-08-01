@@ -1,33 +1,33 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "id_product": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_product_attribute": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop_group": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "quantity": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "depends_on_stock": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "out_of_stock": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "location": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

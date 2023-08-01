@@ -1,72 +1,72 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "deleted": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "is_module": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_tax_rules_group": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_reference": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "active": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "is_free": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "url": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shipping_handling": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shipping_external": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "range_behavior": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "shipping_method": {
       "type": ["string", "integer"]
     },
     "max_width": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "max_height": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "max_depth": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "max_weight": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "grade": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "external_module_name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "need_range": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "position": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "delay": {
-      "type": ["null", "string"]
+      "type": "string"
     }
   }
 }

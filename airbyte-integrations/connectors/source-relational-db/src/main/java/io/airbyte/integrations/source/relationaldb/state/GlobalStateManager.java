@@ -57,10 +57,9 @@ public class GlobalStateManager extends AbstractStateManager<AirbyteStateMessage
         CURSOR_FUNCTION,
         CURSOR_FIELD_FUNCTION,
         CURSOR_RECORD_COUNT_FUNCTION,
-        NAME_NAMESPACE_PAIR_FUNCTION,
-        true);
+        NAME_NAMESPACE_PAIR_FUNCTION);
 
-    this.cdcStateManager = new CdcStateManager(extractCdcState(airbyteStateMessage), extractStreams(airbyteStateMessage), airbyteStateMessage);
+    this.cdcStateManager = new CdcStateManager(extractCdcState(airbyteStateMessage), extractStreams(airbyteStateMessage));
   }
 
   @Override

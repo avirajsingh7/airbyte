@@ -50,9 +50,7 @@ acceptance_tests:
       - name: incoming_email_tasks
         bypass_reason: "unable to test due to fast-changing data"
       - name: created_activities
-        bypass_reason: "return records randomly"
-      - name: opportunity_status_change_activities
-        bypass_reason: "return records randomly"
+        bypass_reason: "data deleted after some time"
       fail_on_extra_columns: false
   incremental:
     tests:

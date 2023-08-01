@@ -25,12 +25,8 @@ public abstract class BaseSheetGenerator implements CsvSheetGenerator {
   }
 
   @Override
-  public List<Object> getDataRow(final JsonNode formattedData) {
+  public List<Object> getDataRow(JsonNode formattedData) {
     return new LinkedList<>(getRecordColumns(formattedData));
-  }
-
-  public List<Object> getDataRow(final UUID id, final String formattedString, final long emittedAt) {
-    throw new UnsupportedOperationException("Not implemented in BaseSheetGenerator");
   }
 
   abstract List<String> getRecordColumns(JsonNode json);

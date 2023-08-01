@@ -18,7 +18,7 @@ data:
     oss:
       enabled: true
   releaseStage: alpha
-  documentationUrl: https://docs.airbyte.com/integrations/sources/exchange-rates
+  documentationUrl: https://docs.airbyte.com/integrations/sources/exchangeratesapi
   tags:
     - language:python
 metadataSpecVersion: "1.0"

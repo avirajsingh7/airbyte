@@ -145,10 +145,6 @@
     "assignee_updated_at": {
       "type": ["null", "string"],
       "format": "date-time"
-    },
-    "custom_status_updated_at": {
-      "type": ["null", "string"],
-      "format": "date-time"
     }
   },
   "type": ["null", "object"]

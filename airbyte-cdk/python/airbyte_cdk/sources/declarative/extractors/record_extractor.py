@@ -4,9 +4,10 @@
 
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Any, List, Mapping
+from typing import List
 
 import requests
+from airbyte_cdk.sources.declarative.types import Record
 
 
 @dataclass
@@ -19,7 +20,7 @@ class RecordExtractor:
     def extract_records(
         self,
         response: requests.Response,
-    ) -> List[Mapping[str, Any]]:
+    ) -> List[Record]:
         """
         Selects records from the response
         :param response: The response to extract the records from

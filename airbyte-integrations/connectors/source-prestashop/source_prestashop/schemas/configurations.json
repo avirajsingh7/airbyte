@@ -1,15 +1,15 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": ["null", "integer"]
+      "type": "integer"
     },
     "value": {
       "type": ["null", "string"]
     },
     "name": {
-      "type": ["null", "string"]
+      "type": "string"
     },
     "id_shop_group": {
       "type": ["null", "string"]
@@ -18,11 +18,11 @@
       "type": ["null", "string"]
     },
     "date_add": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     },
     "date_upd": {
-      "type": ["null", "string"],
+      "type": "string",
       "format": "date-time"
     }
   }

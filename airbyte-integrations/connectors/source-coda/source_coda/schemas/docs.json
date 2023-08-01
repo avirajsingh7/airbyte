@@ -34,7 +34,7 @@
     "owner": {
       "type": "string"
     },
-    "ownerName": {
+    "owner_name": {
       "type": "string"
     },
     "docSize": {
