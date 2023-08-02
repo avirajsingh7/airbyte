@@ -6,8 +6,8 @@
 import sys
 
 from airbyte_cdk.entrypoint import launch
-from source_retently import SourceRetently
+from source_source_retently import SourceSourceRetently
 
 if __name__ == "__main__":
-    source = SourceRetently()
+    source = SourceSourceRetently()
     launch(source, sys.argv[1:])

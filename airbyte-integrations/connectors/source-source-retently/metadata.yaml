@@ -1,0 +1,19 @@
+data:
+  allowedHosts:
+    hosts:
+      - "*" # Please change to the hostname of the source.
+  registries:
+    oss:
+      enabled: false
+  connectorSubtype: api
+  connectorType: source
+  definitionId: 4b03b4e0-3849-4b39-ade8-04fb208d272d
+  dockerImageTag: 0.1.0
+  dockerRepository: airbyte/source-source-retently
+  githubIssueLabel: source-source-retently
+  icon: source-retently.svg
+  license: MIT
+  name: Source Retently 
+  releaseStage: alpha
+  supportUrl: https://docs.airbyte.com/integrations/sources/source-retently
+metadataSpecVersion: "1.0"

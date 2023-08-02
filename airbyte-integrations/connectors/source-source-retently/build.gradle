@@ -5,5 +5,5 @@ plugins {
 }
 
 airbytePython {
-    moduleDirectory 'source_retently'
+    moduleDirectory 'source_source_retently'
 }

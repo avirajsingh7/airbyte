@@ -1,7 +1,6 @@
 *
 !Dockerfile
-!Dockerfile.test
 !main.py
-!source_retently
+!source_source_retently
 !setup.py
 !secrets
