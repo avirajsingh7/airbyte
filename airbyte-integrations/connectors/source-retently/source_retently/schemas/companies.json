@@ -4,6 +4,7 @@
   "additionalProperties": true,
   "properties": {
     "id": {
+
       "type": ["null", "string"]
     },
     "createdDate": {

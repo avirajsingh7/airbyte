@@ -16,6 +16,11 @@ data:
   icon: retently.svg
   license: MIT
   name: Retently
+  registries:
+    cloud:
+      enabled: true
+    oss:
+      enabled: true
   releaseStage: alpha
   supportUrl: https://docs.airbyte.com/integrations/sources/retently
   tags:

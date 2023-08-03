@@ -3,6 +3,11 @@
   "type": "object",
   "additionalProperties": true,
   "properties": {
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {}
+    },
     "email": {
       "type": ["null", "string"]
     },
