@@ -1,7 +1,7 @@
 # Avni Source
 
 This is the repository for the Avni configuration based source connector.
-For information about how to use this connector within Airbyte, see [the documentation](https://docs.airbyte.com/integrations/sources/avni).
+For information about how to use this connector within Airbyte, see [th documentation](https://docs.airbyte.com/integrations/sources/avni).
 
 ## Local development
 
