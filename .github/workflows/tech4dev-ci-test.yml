@@ -1,0 +1,78 @@
+name: Test Modified Connectors
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - 'airbyte-integrations/connectors/**'
+
+  workflow_dispatch:
+
+jobs:
+  test-connectors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Get Start Timestamp
+        id: get-start-timestamp
+        shell: bash
+        run: echo "start-timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Install Java Environment
+        id: install-java-environment
+        uses: ./.github/actions/install-java-environment
+
+      - name: Install Airbyte CI
+        id: install-airbyte-ci
+        uses: ./.github/actions/install-airbyte-ci
+        with:
+          airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
+          is_fork: true
+
+      - name: Get Modified Connector Folders
+        id: modified-connectors
+        run: |
+          echo "::group::Identifying modified connectors"
+          MODIFIED_FOLDERS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
+          echo "Modified folders:"
+          echo "$MODIFIED_FOLDERS"
+          echo "::set-output name=folders::$MODIFIED_FOLDERS"
+          echo "::endgroup::"
+
+      - name: Process Each Connector
+        if: steps.modified-connectors.outputs.folders != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${{ steps.modified-connectors.outputs.folders }}" | while read -r connector; do
+            echo "Processing connector: $connector"
+
+            # Create the secret config.json path
+            CONFIG_PATH="airbyte-integrations/connectors/${connector}/secrets"
+            mkdir -p "$CONFIG_PATH"
+
+            # Fetch secrets from GitHub
+            SECRET_KEY="SECRET_${connector^^}"
+            SECRET_VALUE="${!SECRET_KEY}"
+
+            if [ -z "$SECRET_VALUE" ]; then
+              echo "No secrets found for $connector. Skipping."
+              continue
+            fi
+
+            # Write the secret to config.json
+            echo "$SECRET_VALUE" > "$CONFIG_PATH/config.json"
+
+            # Run airbyte-ci test command
+            echo "Running tests for $connector"
+            airbyte-ci connectors --name=$connector test
+
+            # Clean up the folder
+            echo "Cleaning up secrets for $connector"
+            rm -rf "$CONFIG_PATH"
+          done
