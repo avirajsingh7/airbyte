@@ -38,6 +38,12 @@ jobs:
         id: modified-connectors
         run: |
           echo "::group::Identifying modified connectors"
+          echo "GitHub event before commit (before): ${{ github.event.before }}"
+          echo "GitHub commit hash (sha): ${{ github.sha }}"
+
+          echo "Running git diff to get modified files:"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+
           MODIFIED_FOLDERS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
           echo "Modified folders:"
           echo "$MODIFIED_FOLDERS"
@@ -57,7 +63,7 @@ jobs:
             mkdir -p "$CONFIG_PATH"
 
             # Fetch secrets from GitHub
-            SECRET_KEY="SECRET_${connector^^}"
+            SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
             SECRET_VALUE="${!SECRET_KEY}"
 
             if [ -z "$SECRET_VALUE" ]; then
