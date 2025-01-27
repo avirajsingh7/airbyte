@@ -8,6 +8,7 @@ on:
       - synchronize
     paths:
       - 'airbyte-integrations/connectors/**'
+
   workflow_dispatch:
 
 jobs:
@@ -33,19 +34,33 @@ jobs:
           airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
           is_fork: true
 
+      - name: Fetch all branches
+        run: git fetch --all
+
+      # Step 3: Get the base commit SHA (the target branch)
+      - name: Get base commit SHA
+        id: base_sha
+        run: |
+          echo "BASE_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})" >> $GITHUB_ENV
+
+      # Step 4: Get the head commit SHA (the source branch)
+      - name: Get head commit SHA
+        id: head_sha
+        run: |
+          echo "HEAD_SHA=$(git rev-parse origin/${{ github.sha }})" >> $GITHUB_ENV
+
       - name: Get Modified Connector Folders
         id: modified-connectors
         run: |
           echo "::group::Identifying modified connectors"
-          echo "GitHub event before commit (before): ${{ github.event.before }}"
-          echo "GitHub commit hash (sha): ${{ github.sha }}"
 
+          echo "Running git diff to get modified files:"
+          git diff --name-only $BASE_SHA $HEAD_SHA
 
-          MODIFIED_FOLDERS=$(git diff --name-only ${{ github.event.before } ${{ github.sha }} | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
-
+          MODIFIED_FOLDERS=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
           echo "Modified folders:"
           echo "$MODIFIED_FOLDERS"
-          echo "folders=$MODIFIED_FOLDERS" >> $GITHUB_OUTPUT
+          echo "::set-output name=folders::$MODIFIED_FOLDERS"
           echo "::endgroup::"
 
       - name: Process Each Connector
