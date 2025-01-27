@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -50,7 +50,7 @@ jobs:
       - name: Get head commit SHA
         id: head_sha
         run: |
-          echo "HEAD_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.sha }})" >> $GITHUB_ENV
+          echo "HEAD_SHA=$(git rev-parse origin/${{ github.event.pull_request.head.ref }})" >> $GITHUB_ENV
 
       - name: Get Modified Connector Folders
         id: modified-connectors
@@ -63,15 +63,15 @@ jobs:
           MODIFIED_FOLDERS=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
           echo "Modified folders:"
           echo "$MODIFIED_FOLDERS"
-          echo "::set-output name=folders::$MODIFIED_FOLDERS"
+          echo "FOLDERS=$MODIFIED_FOLDERS" >> $GITHUB_ENV
           echo "::endgroup::"
 
       - name: Process Each Connector
-        if: steps.modified-connectors.outputs.folders != ''
+        if: env.FOLDERS != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ steps.modified-connectors.outputs.folders }}" | while read -r connector; do
+          echo "$FOLDERS" | while read -r connector; do
             echo "Processing connector: $connector"
 
             # Create the secret config.json path
