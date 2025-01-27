@@ -41,7 +41,7 @@ jobs:
           echo "GitHub commit hash (sha): ${{ github.sha }}"
 
 
-          MODIFIED_FOLDERS=$(git diff --name-only origin/${{ github.base_ref }}...origin/${{ github.head_ref }} | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
+          MODIFIED_FOLDERS=$(git diff --name-only ${{ github.event.before } ${{ github.sha }} | grep '^airbyte-integrations/connectors/' | cut -d '/' -f 3 | sort | uniq)
 
           echo "Modified folders:"
           echo "$MODIFIED_FOLDERS"
