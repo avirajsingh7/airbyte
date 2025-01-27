@@ -84,7 +84,7 @@ jobs:
 
             if [ -z "$SECRET_VALUE" ]; then
               echo "No secrets found for $connector. Skipping."
-              continue
+              exit 1 
             fi
 
             # Write the secret to config.json
