@@ -16,7 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get Start Timestamp
         id: get-start-timestamp
@@ -37,9 +39,6 @@ jobs:
       # - name: Add remote
       #   run: git remote add stream https://github.com/avirajsingh7/airbyte
 
-      # Step 3: Get the base commit SHA (the target branch)
-      - name: Fetch all branches
-        run: git fetch --all
 
       # Step 3: Get the base commit SHA (the target branch)
       - name: Get base commit SHA
@@ -51,7 +50,7 @@ jobs:
       - name: Get head commit SHA
         id: head_sha
         run: |
-          echo "HEAD_SHA=$(git rev-parse origin/${{ github.sha }})" >> $GITHUB_ENV
+          echo "HEAD_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.sha }})" >> $GITHUB_ENV
 
       - name: Get Modified Connector Folders
         id: modified-connectors
