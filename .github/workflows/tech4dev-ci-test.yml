@@ -23,31 +23,35 @@ jobs:
         shell: bash
         run: echo "start-timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
-      - name: Install Java Environment
-        id: install-java-environment
-        uses: ./.github/actions/install-java-environment
+      # - name: Install Java Environment
+      #   id: install-java-environment
+      #   uses: ./.github/actions/install-java-environment
 
-      - name: Install Airbyte CI
-        id: install-airbyte-ci
-        uses: ./.github/actions/install-airbyte-ci
-        with:
-          airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
-          is_fork: true
+      # - name: Install Airbyte CI
+      #   id: install-airbyte-ci
+      #   uses: ./.github/actions/install-airbyte-ci
+      #   with:
+      #     airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
+      #     is_fork: true
 
-      - name: Add remote
-        run: git remote add stream https://github.com/avirajsingh7/airbyte
+      # - name: Add remote
+      #   run: git remote add stream https://github.com/avirajsingh7/airbyte
+
+      # Step 3: Get the base commit SHA (the target branch)
+      - name: Fetch all branches
+        run: git fetch --all
 
       # Step 3: Get the base commit SHA (the target branch)
       - name: Get base commit SHA
         id: base_sha
         run: |
-          echo "BASE_SHA=$(git rev-parse stream/${{ github.event.pull_request.base.ref }})" >> $GITHUB_ENV
+          echo "BASE_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})" >> $GITHUB_ENV
 
       # Step 4: Get the head commit SHA (the source branch)
       - name: Get head commit SHA
         id: head_sha
         run: |
-          echo "HEAD_SHA=$(git rev-parse stream/${{ github.sha }})" >> $GITHUB_ENV
+          echo "HEAD_SHA=$(git rev-parse origin/${{ github.sha }})" >> $GITHUB_ENV
 
       - name: Get Modified Connector Folders
         id: modified-connectors
