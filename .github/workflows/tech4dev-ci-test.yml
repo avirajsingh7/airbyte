@@ -57,7 +57,7 @@ jobs:
             mkdir -p "$CONFIG_PATH"
 
             # Fetch secrets from GitHub
-            SECRET_KEY="SECRET_${connector^^}"
+            SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
             SECRET_VALUE="${!SECRET_KEY}"
 
             if [ -z "$SECRET_VALUE" ]; then
