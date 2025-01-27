@@ -25,20 +25,16 @@ jobs:
         shell: bash
         run: echo "start-timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
-      # - name: Install Java Environment
-      #   id: install-java-environment
-      #   uses: ./.github/actions/install-java-environment
+      - name: Install Java Environment
+        id: install-java-environment
+        uses: ./.github/actions/install-java-environment
 
-      # - name: Install Airbyte CI
-      #   id: install-airbyte-ci
-      #   uses: ./.github/actions/install-airbyte-ci
-      #   with:
-      #     airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
-      #     is_fork: true
-
-      # - name: Add remote
-      #   run: git remote add stream https://github.com/avirajsingh7/airbyte
-
+      - name: Install Airbyte CI
+        id: install-airbyte-ci
+        uses: ./.github/actions/install-airbyte-ci
+        with:
+          airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
+          is_fork: true
 
       # Step 3: Get the base commit SHA (the target branch)
       - name: Get base commit SHA
@@ -80,7 +76,7 @@ jobs:
 
             # Fetch secrets from GitHub
             SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
-            SECRET_VALUE="${!SECRET_KEY}"
+            SECRET_VALUE="${{ secrets[SECRET_KEY] }}"
 
             if [ -z "$SECRET_VALUE" ]; then
               echo "No secrets found for $connector. Skipping."
