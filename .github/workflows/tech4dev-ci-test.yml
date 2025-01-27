@@ -77,7 +77,7 @@ jobs:
             # Fetch secrets from GitHub
             SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
             echo "$SECRET_KEY"
-            SECRET_VALUE="${{ secrets.SECRET_KEY }}"
+            SECRET_VALUE="${{ secrets.SECRETSOURCEAVNI }}"
 
             if [ -z "$SECRET_VALUE" ]; then
               echo "No secrets found for $connector. Skipping."
