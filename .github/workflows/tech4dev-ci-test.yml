@@ -32,23 +32,6 @@ jobs:
         shell: bash
         run: echo "start-timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
-      - name: Install Java Environment
-        id: install-java-environment
-        uses: ./.github/actions/install-java-environment
-
-      - name: Install Python Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install setuptools wheel pkg_resources
-          pip install pipx
-
-      - name: Install Airbyte CI
-        id: install-airbyte-ci
-        uses: ./.github/actions/install-airbyte-ci
-        with:
-          airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
-          is_fork: true
-
       # Get the base commit SHA from upstream/main (Airbyte Repo)
       - name: Get base commit SHA
         id: base_sha
@@ -87,6 +70,8 @@ jobs:
           # Ensure we're in the correct directory
           cd $GITHUB_WORKSPACE
           
+          CONNECTORS_TO_TEST=""
+
           echo "$FOLDERS" | while read -r connector; do
             echo "Processing connector: $connector"
 
@@ -101,17 +86,22 @@ jobs:
 
             if [ -z "$SECRET_VALUE" ]; then
               echo "No secrets found for $connector. Skipping."
-              exit 1 
+              continue
             fi
 
             # Write the secret to config.json
             echo "$SECRET_VALUE" > "$CONFIG_PATH/config.json"
-            
-            # Run airbyte-ci test command
-            echo "Running tests for $connector"
-            airbyte-ci connectors --name=$connector test
 
-            # Clean up the folder
-            echo "Cleaning up secrets for $connector"
-            rm -rf "$CONFIG_PATH"
+            # Add connector to the list of connectors to test
+            CONNECTORS_TO_TEST="$CONNECTORS_TO_TEST --name=$connector"
           done
+
+          # Set the CONNECTORS_TO_TEST variable for the next step
+          echo "CONNECTORS_TO_TEST=$CONNECTORS_TO_TEST" >> $GITHUB_ENV
+
+      - name: Test connectors [PULL REQUESTS]
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/run-airbyte-ci
+        with:
+          context: "pull_request"
+          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
