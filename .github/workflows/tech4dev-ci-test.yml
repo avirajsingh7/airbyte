@@ -18,7 +18,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Ensure full commit history is fetched
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Add Upstream Remote (Fork Fix)
+        run: |
+          git remote add upstream https://github.com/avirajsingh7/airbyte.git
+          git fetch upstream
+          git branch --all
 
       - name: Get Start Timestamp
         id: get-start-timestamp
@@ -36,17 +43,21 @@ jobs:
           airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
           is_fork: true
 
-      # Step 3: Get the base commit SHA (the target branch)
+      # Get the base commit SHA from upstream/main (Airbyte Repo)
       - name: Get base commit SHA
         id: base_sha
         run: |
-          echo "BASE_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})" >> $GITHUB_ENV
+          BASE_SHA=$(git merge-base upstream/${{ github.event.pull_request.base.ref }} HEAD)
+          echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
+          echo "Base SHA: $BASE_SHA"
 
-      # Step 4: Get the head commit SHA (the source branch)
+      # Get the head commit SHA (source branch)
       - name: Get head commit SHA
         id: head_sha
         run: |
-          echo "HEAD_SHA=$(git rev-parse origin/${{ github.event.pull_request.head.ref }})" >> $GITHUB_ENV
+          HEAD_SHA=$(git rev-parse HEAD)
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
+          echo "Head SHA: $HEAD_SHA"
 
       - name: Get Modified Connector Folders
         id: modified-connectors
@@ -76,7 +87,7 @@ jobs:
 
             # Fetch secrets from GitHub
             SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
-            echo "$SECRET_KEY"
+            echo "Looking for secret: $SECRET_KEY"
             SECRET_VALUE="${{ secrets.SECRETSOURCEAVNI }}"
 
             if [ -z "$SECRET_VALUE" ]; then
