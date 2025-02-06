@@ -106,5 +106,4 @@ jobs:
           context: "pull_request"
           docker_hub_password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          options: "--use-local-secrets"
-          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
+          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test --use-local-secrets"
