@@ -103,6 +103,10 @@ jobs:
             # Write the secret to config.json
             echo "$SECRET_VALUE" > "$CONFIG_PATH/config.json"
 
+            # 4. Install setuptools (to avoid pkg_resources error)
+            python -m pip install --upgrade pip
+            pip install setuptools
+            
             # Run airbyte-ci test command
             echo "Running tests for $connector"
             airbyte-ci connectors --name=$connector test
