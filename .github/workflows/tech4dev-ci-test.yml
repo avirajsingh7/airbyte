@@ -36,6 +36,12 @@ jobs:
         id: install-java-environment
         uses: ./.github/actions/install-java-environment
 
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel pkg_resources
+          pip install pipx
+
       - name: Install Airbyte CI
         id: install-airbyte-ci
         uses: ./.github/actions/install-airbyte-ci
@@ -73,16 +79,14 @@ jobs:
           echo "FOLDERS=$MODIFIED_FOLDERS" >> $GITHUB_ENV
           echo "::endgroup::"
 
-      - name: Install Setuptools
-        run: |
-          python -m pip install --upgrade pip
-          pip install setuptools
-
       - name: Process Each Connector
         if: env.FOLDERS != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Ensure we're in the correct directory
+          cd $GITHUB_WORKSPACE
+          
           echo "$FOLDERS" | while read -r connector; do
             echo "Processing connector: $connector"
 
@@ -102,10 +106,6 @@ jobs:
 
             # Write the secret to config.json
             echo "$SECRET_VALUE" > "$CONFIG_PATH/config.json"
-
-            # 4. Install setuptools (to avoid pkg_resources error)
-            python -m pip install --upgrade pip
-            pip install setuptools
             
             # Run airbyte-ci test command
             echo "Running tests for $connector"
