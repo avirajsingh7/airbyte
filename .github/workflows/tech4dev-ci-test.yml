@@ -73,6 +73,11 @@ jobs:
           echo "FOLDERS=$MODIFIED_FOLDERS" >> $GITHUB_ENV
           echo "::endgroup::"
 
+      - name: Install Setuptools
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools
+
       - name: Process Each Connector
         if: env.FOLDERS != ''
         env:
