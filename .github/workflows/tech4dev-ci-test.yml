@@ -111,3 +111,4 @@ jobs:
           git_branch: ${{ github.head_ref }}
           git_revision: ${{ env.HEAD_SHA }}
           subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} test"
+          is_fork: true
