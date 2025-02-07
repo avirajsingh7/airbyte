@@ -110,4 +110,4 @@ jobs:
           github_token: ${{  secrets.GITHUB_TOKEN }}
           git_branch: ${{ github.head_ref }}
           git_revision: ${{ env.HEAD_SHA }}
-          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
+          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} test"
