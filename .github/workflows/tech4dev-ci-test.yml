@@ -62,6 +62,13 @@ jobs:
           echo "FOLDERS=$MODIFIED_FOLDERS" >> $GITHUB_ENV
           echo "::endgroup::"
 
+      - name: Fetch last commit ID from remote branch
+        id: fetch_last_commit_id_pr
+        run: |
+          COMMIT_ID=$(git rev-parse HEAD)
+          echo "commit_id=$COMMIT_ID" >> $GITHUB_ENV
+          echo "Commit ID: $COMMIT_ID"
+
       - name: Process Each Connector
         if: env.FOLDERS != ''
         env:
@@ -106,4 +113,8 @@ jobs:
           context: "pull_request"
           docker_hub_password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          git_repo_url: "https://github.com/avirajsingh7/airbyte.git"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_branch: ${{ github.head_ref }}
+          git_revision: ${{ env.commit_id }}
           subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
