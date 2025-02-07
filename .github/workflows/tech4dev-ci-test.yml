@@ -109,5 +109,5 @@ jobs:
           git_repo_url: "https://github.com/avirajsingh7/airbyte.git"
           github_token: ${{ secrets.TOKEN }}
           git_branch: ${{ github.head_ref }}
-          git_revision: ${{ HEAD_SHA }}
+          git_revision: ${{ env.HEAD_SHA }}
           subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
