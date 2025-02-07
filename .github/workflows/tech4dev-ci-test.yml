@@ -107,7 +107,7 @@ jobs:
           docker_hub_password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
           git_repo_url: "https://github.com/avirajsingh7/airbyte.git"
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{  secrets.GITHUB_TOKEN }}
           git_branch: ${{ github.head_ref }}
           git_revision: ${{ env.HEAD_SHA }}
           subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} --execute-timeout=18000 test"
