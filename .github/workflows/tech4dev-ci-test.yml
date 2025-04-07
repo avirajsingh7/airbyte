@@ -18,35 +18,35 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Ensure full commit history is fetched
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Add Upstream Remote (Fork Fix)
+        run: |
+          git remote add upstream https://github.com/avirajsingh7/airbyte.git
+          git fetch upstream
+          git branch --all
 
       - name: Get Start Timestamp
         id: get-start-timestamp
         shell: bash
         run: echo "start-timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
-      - name: Install Java Environment
-        id: install-java-environment
-        uses: ./.github/actions/install-java-environment
-
-      - name: Install Airbyte CI
-        id: install-airbyte-ci
-        uses: ./.github/actions/install-airbyte-ci
-        with:
-          airbyte_ci_binary_url: "https://connectors.airbyte.com/airbyte-ci/releases/ubuntu/latest/airbyte-ci"
-          is_fork: true
-
-      # Step 3: Get the base commit SHA (the target branch)
+      # Get the base commit SHA from upstream/main (Airbyte Repo)
       - name: Get base commit SHA
         id: base_sha
         run: |
-          echo "BASE_SHA=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})" >> $GITHUB_ENV
+          BASE_SHA=$(git merge-base upstream/${{ github.event.pull_request.base.ref }} HEAD)
+          echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
+          echo "Base SHA: $BASE_SHA"
 
-      # Step 4: Get the head commit SHA (the source branch)
+      # Get the head commit SHA (source branch)
       - name: Get head commit SHA
         id: head_sha
         run: |
-          echo "HEAD_SHA=$(git rev-parse origin/${{ github.event.pull_request.head.ref }})" >> $GITHUB_ENV
+          HEAD_SHA=$(git rev-parse HEAD)
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
+          echo "Head SHA: $HEAD_SHA"
 
       - name: Get Modified Connector Folders
         id: modified-connectors
@@ -67,6 +67,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Ensure we're in the correct directory
+          cd $GITHUB_WORKSPACE
+          
+          CONNECTORS_TO_TEST=""
+
           echo "$FOLDERS" | while read -r connector; do
             echo "Processing connector: $connector"
 
@@ -76,22 +81,34 @@ jobs:
 
             # Fetch secrets from GitHub
             SECRET_KEY="SECRET$(echo "${connector^^}" | tr -d '-')"
-            echo "$SECRET_KEY"
+            echo "Looking for secret: $SECRET_KEY"
             SECRET_VALUE="${{ secrets.SECRETSOURCEAVNI }}"
 
             if [ -z "$SECRET_VALUE" ]; then
               echo "No secrets found for $connector. Skipping."
-              exit 1 
+              continue
             fi
 
             # Write the secret to config.json
             echo "$SECRET_VALUE" > "$CONFIG_PATH/config.json"
 
-            # Run airbyte-ci test command
-            echo "Running tests for $connector"
-            airbyte-ci connectors --name=$connector test
-
-            # Clean up the folder
-            echo "Cleaning up secrets for $connector"
-            rm -rf "$CONFIG_PATH"
+            # Add connector to the list of connectors to test
+            CONNECTORS_TO_TEST="$CONNECTORS_TO_TEST --name=$connector"
           done
+
+          # Set the CONNECTORS_TO_TEST variable for the next step
+          echo "CONNECTORS_TO_TEST=$CONNECTORS_TO_TEST" >> $GITHUB_ENV
+
+      - name: Test connectors [PULL REQUESTS]
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/run-airbyte-ci
+        with:
+          context: "pull_request"
+          docker_hub_password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          git_repo_url: "https://github.com/avirajsingh7/airbyte.git"
+          github_token: ${{  secrets.GITHUB_TOKEN }}
+          git_branch: ${{ github.head_ref }}
+          git_revision: ${{ env.HEAD_SHA }}
+          subcommand: "connectors ${{ env.CONNECTORS_TO_TEST }} test"
+          is_fork: true
